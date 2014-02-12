@@ -365,7 +365,7 @@ function main() {
 		// Stop spawning fingers
 		fingersTimer.stop();
 		// Make birdie reset the game
-		birdie.events.onInputDown.addOnce(reset);
+		game.input.onDown.addOnce(reset);
 		hurtSnd.play();
 	}
 
