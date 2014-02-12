@@ -334,12 +334,14 @@ function main() {
 	function addScore(_, inv) {
 		invs.remove(inv);
 		score += 1;
+    SPEED += SPEED*0.1;
 		scoreText.setText(score);
 		scoreSnd.play();
 	}
 /* ********************** Game over ******************************* */
 	function setGameOver() {
 		gameOver = true;
+    SPEED = 250;
 		var hiscore = window.localStorage.getItem('hiscore');
 		hiscore = hiscore ? hiscore : score;
 		hiscore = score > parseInt(hiscore, 10) ? score : hiscore;
