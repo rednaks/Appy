@@ -33,6 +33,14 @@ function main() {
     GRAVITY = (-1)*GRAVITY;
     FLAP_F = (-1)*FLAP_F;
 		birdie.body.gravity.y = GRAVITY;
+    if(gameOver){
+      if(GRAVITY < 0){
+        GRAVITY = -GRAVITY;
+      }
+        FLAP_F = FLAP;
+      return;
+    }
+
     setTimeout(reverse, REVERSE_TIME);
   }
 
@@ -235,8 +243,6 @@ function main() {
 		cloudsTimer.add(Math.random());
     console.log(game);
     console.log(Phaser);
-    //game.time.events.repeat(Phaser.Timer.SECOND * 2, 10, reverse, this);
-    setTimeout(reverse, REVERSE_TIME);
 		// RESET!
 		reset();
 	}
@@ -277,6 +283,7 @@ function main() {
 		tuto.renderable = false;
 		// START!
 		gameStarted = true;
+    setTimeout(reverse, REVERSE_TIME);
 	}
 
 	function flap() {
