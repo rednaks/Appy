@@ -2,8 +2,10 @@ var DEBUG = false;
 var SPEED = 250;
 var GRAVITY = 13;
 var FLAP = 230;
+var FLAP_F = FLAP;
 var SPAWN_RATE = 1 / 1;
 var OPENING = 100;
+var REVERSE_TIME = 3000;
 
 
 function main() {
@@ -26,6 +28,13 @@ function main() {
 		false,
 		false
 	);
+
+  function reverse(){
+    GRAVITY = (-1)*GRAVITY;
+    FLAP_F = (-1)*FLAP_F;
+		birdie.body.gravity.y = GRAVITY;
+    setTimeout(reverse, REVERSE_TIME);
+  }
 
 	function preload() {
 		var assets = {
@@ -68,6 +77,7 @@ function main() {
 		birdie,
 		fence,
 		scoreText,
+    speedText,
 		instText,
 		gameOverText,
 		gameOverScore,
@@ -148,6 +158,22 @@ function main() {
 			}
 		);
 		scoreText.anchor.setTo(0.5, 0.5);
+
+    // Add Speed text
+    speedText = game.add.text(
+        game.world.width / 2,
+        game.world.height / 2,
+        "",
+ 			{
+				font: '12px "Press Start 2P"',
+				fill: '#fff',
+				stroke: '#000',
+				strokeThickness: 4,
+				align: 'center'
+			}
+	  );
+    speedText.anchor.setTo(0.5,0.5);
+
 		// Add instructions text
 		instText = game.add.text(
 			game.world.width / 2,
@@ -207,6 +233,10 @@ function main() {
 		cloudsTimer.onEvent.add(spawnCloud);
 		cloudsTimer.start();
 		cloudsTimer.add(Math.random());
+    console.log(game);
+    console.log(Phaser);
+    //game.time.events.repeat(Phaser.Timer.SECOND * 2, 10, reverse, this);
+    setTimeout(reverse, REVERSE_TIME);
 		// RESET!
 		reset();
 	}
@@ -241,6 +271,7 @@ function main() {
 		fingersTimer.add(1);
 		// Show score
 		scoreText.setText(score);
+    speedText.setText(Math.trunc(SPEED)+" m/s");
 		instText.renderable = false;
 		getReady.renderable = false;
 		tuto.renderable = false;
@@ -253,7 +284,7 @@ function main() {
 			start();
 		}
 		if (!gameOver) {
-			birdie.body.velocity.y = -FLAP;
+			birdie.body.velocity.y = -FLAP_F;
 			flapSnd.play();
 			
 		}
@@ -335,6 +366,7 @@ function main() {
 		invs.remove(inv);
 		score += 1;
     SPEED += SPEED*0.1;
+    speedText.setText(Math.trunc(SPEED)+ " m/s");
 		scoreText.setText(score);
 		scoreSnd.play();
 	}
@@ -425,6 +457,14 @@ function main() {
 			2 + 0.1 * Math.cos(game.time.now / 100),
 			2 + 0.1 * Math.sin(game.time.now / 100)
 		);
+
+    // Shake speed Text :
+		speedText.scale.setTo(
+			2 + 0.1 * Math.cos(game.time.now / 100),
+			2 + 0.1 * Math.sin(game.time.now / 100)
+		);
+
+
 		// Update clouds timer
 		cloudsTimer.update();
 		// Remove offscreen clouds
